@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SpaceX Launches</title>
+    <style>
+      <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .launch-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .launch-container button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .launch-container button:hover {
+            background-color: #0056b3;
+        }
+
+        .launch-card {
+            border: 1px solid rgb(66, 9, 141);
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+            color:rgb(66, 9, 141);
+            background-color:white;
+        }
+      
+        .launch-card h2 {
+           
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .launch-card p {
+         
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>SpaceX Launches</h1>
+    <div class="launch-container">
+        <button onclick="getLaunches()">Load Launches</button>
+        <div id="launches"></div>
+    </div>
+
+    <script>
+        function getLaunches() {
+            fetch('https://api.spacexdata.com/v4/launches')
+                .then(response => response.json())
+                .then(data => displayLaunches(data))
+                .catch(error => console.log(error));
+        }
+
+        function displayLaunches(launches) {
+            const launchesContainer = document.getElementById('launches');
+            launchesContainer.innerHTML = '';
+
+            launches.forEach(launch => {
+                const card = document.createElement('div');
+                card.className = 'launch-card';
+
+                const missionName = document.createElement('h2');
+                missionName.textContent = launch.name;
+
+                const launchDate = document.createElement('p');
+                launchDate.textContent = 'Launch Date: ' + new Date(launch.date_utc).toLocaleDateString();
+
+                const details = document.createElement('p');
+                details.textContent = 'Details: ' + launch.details;
+
+                card.appendChild(missionName);
+                card.appendChild(launchDate);
+                card.appendChild(details);
+
+                launchesContainer.appendChild(card);
+            });
+        }
+    </script>
+</body>
+</html>
